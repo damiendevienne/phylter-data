@@ -11,7 +11,7 @@ source("../functions.R")
 ######### 1. get data computed on ALL sequences by T. Tricou
 ## 
 
-data<-read.table("Outlier_Duplication.txt", header=TRUE)
+data<-read.table("data/duplications-and-info/Outlier_Duplication.txt", header=TRUE)
 ##recompute GC3 BETTER and length because original values were incorrect
 GC3_2<-apply(data,1,function(x,y) sum(as.numeric(x[2:65])*y)/sum(as.numeric(x[2:65])),y=sapply(colnames(data)[2:65], function(x) strsplit(x,"")[[1]][3] %in% c("C","G")))
 data<-cbind(data,GC3_2)
