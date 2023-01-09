@@ -71,8 +71,8 @@ getTSres<-function(inittrees, TS) {
 #### 2.1. get Phylter Results. 
 
 ##Latest version ofPhylter was run elsewhere and result files were imported (for ex. file1_v2.txt). look at the header of the files to find parameters
-phyres1<-getPhyRes(trees, "file1_v2.txt")
-phyres4<-getPhyRes(trees, "file_k1.55_v2.txt") #gives the closest nb of outliers as compared to treeshrink with default values
+phyres1<-getPhyRes(trees, "data/phylter-results/file1_v2.txt")
+phyres4<-getPhyRes(trees, "data/phylter-results/file_k1.55_v2.txt") #gives the closest nb of outliers as compared to treeshrink with default values
 
 #### 2.2. run TeeShrink and get results
 
