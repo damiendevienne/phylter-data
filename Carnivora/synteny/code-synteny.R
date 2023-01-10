@@ -35,18 +35,33 @@ ComputePairwisePvalue<-function(outfile) {
 GetDataFrameForHeatmapAndPlot<-function(RESU, what="breaks") {
     sp1<-unlist(lapply(strsplit(rownames(RESU)," - "), function(x) x[1]))
     sp2<-unlist(lapply(strsplit(rownames(RESU)," - "), function(x) x[2]))
-    if (what=="breaks") DF<-data.frame(sp1=sp1, sp2=sp2,value=RESU$pval.breaks)
-    if (what=="dblbreaks") DF<-data.frame(sp1=sp2, sp2=sp1,value=RESU$pval.dbl.breaks)
+    if (what=="breaks") DF<-data.frame(sp1=sp1, sp2=sp2,pvalue=RESU$pval.breaks)
+    if (what=="dblbreaks") DF<-data.frame(sp1=sp2, sp2=sp1,pvalue=RESU$pval.dbl.breaks)
 
-    p<-ggplot(DF, aes(x = sp1, y = sp2, fill = value)) + geom_tile(color="black") + geom_text(aes(label = value), color = "white", size = 4) + coord_fixed() +  theme(axis.text.x = element_text(angle = 90))
+    p<-ggplot(DF, aes(x = sp1, y = sp2, fill = pvalue)) + geom_tile(color="black") + geom_text(aes(label = pvalue), color = "white", size = 4) + coord_fixed() +  theme(axis.text.x = element_text(angle = 90))
     p
 }
 
-R1.phy<-ComputePairwisePvalue("../data/phylter-results/file1_v2.txt")
-R2.phy<-ComputePairwisePvalue("../data/phylter-results/file_k1.55_v2.txt")
-R1.ts<-ComputePairwisePvalue("../data/treeshrink-results/treeshrink0.012.txt")
-R2.ts<-ComputePairwisePvalue("../data/treeshrink-results/treeshrink0.05.txt")
+R1.phy<-ComputePairwisePvalue("../data/phylter-results/file1_v2.txt") #small
+R2.phy<-ComputePairwisePvalue("../data/phylter-results/file_k1.55_v2.txt") #large
+R1.ts<-ComputePairwisePvalue("../data/treeshrink-results/treeshrink0.012.txt") #small
+R2.ts<-ComputePairwisePvalue("../data/treeshrink-results/treeshrink0.05.txt") #large
 
+p1<-GetDataFrameForHeatmapAndPlot(R1.phy,"breaks")
+p2<-GetDataFrameForHeatmapAndPlot(R1.ts,"breaks")
+p3<-GetDataFrameForHeatmapAndPlot(R1.phy,"dblbreaks")
+p4<-GetDataFrameForHeatmapAndPlot(R1.ts,"dblbreaks")
+p5<-GetDataFrameForHeatmapAndPlot(R2.phy,"breaks")
+p6<-GetDataFrameForHeatmapAndPlot(R2.ts,"breaks")
+p7<-GetDataFrameForHeatmapAndPlot(R2.phy,"dblbreaks")
+p8<-GetDataFrameForHeatmapAndPlot(R2.ts,"dblbreaks")
+
+require("ggpubr")
+#THEPLOT<-ggarrange(p1, p2, p3,p4, p5, p6, p7, p8, labels=c("A","B","C","D","E","F","G","H"),ncol = 2, nrow = 4, common.legend = TRUE, legend = "bottom") + theme(legend.title = element_blank())
+THEPLOT.PHY<-ggarrange(p1, p3, p5,p7, labels=c("A","B","C","D"), font.label = list(size = 30, color = "black"), ncol = 2, nrow = 2, common.legend = TRUE, legend = "right") + theme(legend.title = element_blank())
+THEPLOT.TS<-ggarrange(p2, p4, p6,p8, labels=c("A","B","C","D"), font.label = list(size = 30, color = "black"), ncol = 2, nrow = 2, common.legend = TRUE, legend = "right") + theme(legend.title = element_blank())
+ggsave("HEATMAPRESULTSYNTENY.PHYLTER.pdf",THEPLOT.PHY,width=16, height=17, dpi=600)
+ggsave("HEATMAPRESULTSYNTENY.TREESHRINK.pdf",THEPLOT.TS,width=16, height=17, dpi=600)
 
 
 
@@ -54,9 +69,6 @@ R2.ts<-ComputePairwisePvalue("../data/treeshrink-results/treeshrink0.05.txt")
 # This function produces the circular plot presented in the manuscript where 
 # orthologous genes of all genes in one scaffold of one species are connected with links
 # and those that are outliers according to phylter are in red (others in blue)
-
-
-#sepcies  
 require(circlize)
 require(scales)
 
