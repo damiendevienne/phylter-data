@@ -82,7 +82,9 @@ TS1<-TS0.012
 TS4<-TS0.05
 tsres1<-getTSres(trees, TS0.012)
 tsres4<-getTSres(trees, TS0.05)
-
+# Write the list of outilers to a file for not having to recompute if necessary. 
+write.table(tsres1[,1:2], file="data/treeshrink-results/treeshrink0.012.txt", sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
+write.table(tsres4[,1:2], file="data/treeshrink-results/treeshrink0.05.txt", sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
 
 ######### 2BIS. Compare sets of outliers, 
 ######### with proportionnal venn diagrams
