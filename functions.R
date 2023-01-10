@@ -47,9 +47,9 @@ computeGCF<-function(trees, sptree) {
 #read the carnivora dataset, naming the gebne trees accordng to the file names
 readCARNIVORAzero<-function() {
 	#list all trees
-	system("ls trees/* > listoftreesCarnivorazero")
+	system("ls data/trees/* > listoftreesCarnivorazero")
 	fi<-readLines("listoftreesCarnivorazero")
-	genelist<-gsub("trees/","",fi)
+	genelist<-gsub("data/trees/","",fi)
 	genelist<-gsub(".treefile","",genelist)
 	T<-list()
 	for (i in 1:length(fi)) {
