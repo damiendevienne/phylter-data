@@ -82,6 +82,7 @@ TS1<-TS0.012
 TS4<-TS0.05
 tsres1<-getTSres(trees, TS0.012)
 tsres4<-getTSres(trees, TS0.05)
+
 # Write the list of outilers to a file for not having to recompute if necessary. 
 write.table(tsres1[,1:2], file="data/treeshrink-results/treeshrink0.012.txt", sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
 write.table(tsres4[,1:2], file="data/treeshrink-results/treeshrink0.05.txt", sep="\t", quote=FALSE, row.names=FALSE, col.names=FALSE)
@@ -138,7 +139,7 @@ D1<-cbind(getdatalen(tsres1,phyres1), dataset="small")
 D4<-cbind(getdatalen(tsres4,phyres4), dataset="large")
 D14<-rbind(D1,D4)
 D14$dataset<-factor(D14$dataset, levels=c("small","large"))
-lenplot<-ggplot(D14, aes(y=length, fill=type)) + geom_boxplot(alpha=.6) + facet_wrap(~dataset) + ylim(1,15000) + xlab("") + ylab("sequence length (bp)") + scale_fill_manual(values=c("#f8766d","#00bfc4", "lightgrey")) + theme(axis.text.x = element_text(color="white"), axis.ticks = element_blank(), legend.position="none") 
+lenplot<-ggplot(D14, aes(y=log(length), fill=type)) + geom_boxplot(alpha=.6) + facet_wrap(~dataset) + xlab("") + ylab("sequence length (bp)") + scale_fill_manual(values=c("#f8766d","#00bfc4", "lightgrey")) + theme(axis.text.x = element_text(color="white"), axis.ticks = element_blank(), legend.position="none") 
 ggsave("lenplot.png", lenplot, height=5, dpi=600)
 
 
