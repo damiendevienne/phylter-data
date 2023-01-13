@@ -6,9 +6,13 @@ Datasets used for the manuscript presenting PhylteR. (https://github.com/damiend
 
 Within the two folders mentioned above, you'll find code and datsets used for the publication. 
 
-For any question regarding PhylteR, please refer to the dedicated github repository at https://damiendevienne.github.io/phylter
-
 ___
+
+For questions regarding PhylteR, please refer to the dedicated github repository at https://damiendevienne.github.io/phylter
+
+For help or question regarding the files present in this repo, please feel free to open an issue here.
+
+
 
 
 
