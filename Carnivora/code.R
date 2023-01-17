@@ -237,5 +237,6 @@ SL$dataset<-factor(SL$dataset, levels=c("small","large"))
 
 gcfplot<-ggplot(SL,aes(x=x,y=delta, color=Method)) + geom_line(aes(group = paired), color="grey") + geom_point(aes(shape=shape), size=3) + scale_shape_manual(values = c(21, 16)) + facet_wrap(~dataset) + xlab("branches of the species tree") + ylab(expression(Delta*gCF~(gCF[init]-gCF))) + theme(legend.position=c(0.12,0.8)) + labs(shape="Initial gCF") + guides(color = guide_legend(order = 1))
 
-ggsave("gcfplot.png",gcfplot, dpi=600)
+#ggsave("gcfplot.png",gcfplot, dpi=600)
+ggsave("gcfplot.pdf",gcfplot, dpi=600)
 
