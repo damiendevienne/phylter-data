@@ -16,7 +16,7 @@ data<-read.table("data/duplications-and-info/Outlier_Duplication.txt", header=TR
 GC3_2<-apply(data,1,function(x,y) sum(as.numeric(x[2:65])*y)/sum(as.numeric(x[2:65])),y=sapply(colnames(data)[2:65], function(x) strsplit(x,"")[[1]][3] %in% c("C","G")))
 data<-cbind(data,GC3_2)
 ##count number of nodes to root in species tree
-sptr<-read.nexus("../phylter-data/Carnivora/eLife/Supermatrix_14307_genes_53_spp_UFBS_TESTNEW_Codon.tre")
+sptr<-read.nexus("Supermatrix_14463_genes_53_spp_UFBS_TESTNEW_Codon.tre")
 nodes2rootperspp<-data.frame(spp=sptr$tip.label, nodes2root=unlist(sapply(1:Ntip(sptr),function(x,tr) length(Ancestors(tr,x)),tr=sptr)))
 n2r<-nodes2rootperspp$nodes2root[match(data$ID, nodes2rootperspp$spp)]
 data<-cbind(data,n2r)
@@ -139,7 +139,7 @@ D1<-cbind(getdatalen(tsres1,phyres1), dataset="small")
 D4<-cbind(getdatalen(tsres4,phyres4), dataset="large")
 D14<-rbind(D1,D4)
 D14$dataset<-factor(D14$dataset, levels=c("small","large"))
-lenplot<-ggplot(D14, aes(y=log(length), fill=type)) + geom_boxplot(alpha=.6) + facet_wrap(~dataset) + xlab("") + ylab("sequence length (bp)") + scale_fill_manual(values=c("#f8766d","#00bfc4", "lightgrey")) + theme(axis.text.x = element_text(color="white"), axis.ticks = element_blank(), legend.position="none") 
+lenplot<-ggplot(D14, aes(y=length, fill=type)) + geom_boxplot(alpha=.6) + facet_wrap(~dataset) + xlab("") + ylab("sequence length (bp)") + scale_fill_manual(values=c("#f8766d","#00bfc4", "lightgrey")) + theme(axis.text.x = element_text(color="white"), axis.ticks = element_blank(), legend.position="none") + scale_y_log10()
 ggsave("lenplot.png", lenplot, height=5, dpi=600)
 
 
