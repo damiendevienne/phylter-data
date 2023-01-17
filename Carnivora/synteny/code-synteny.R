@@ -4,41 +4,34 @@ library(ggplot2)
 
 sps<-c("Ailuropoda_melanoleuca", "Callorhinus_ursinus", "Canis_familiaris", "Eumetopias_jubatus", "Felis_catus", "Mustela_putorius", "Neomonachus_schauinslandi", "Odobenus_rosmarus", "Panthera_pardus", "Panthera_tigris", "Puma_concolor", "Suricata_suricatta", "Ursus_maritimus", "Zalophus_californianus")
 
-
-
-# this function computes all pairwise simple and double breaks and the associated pvalues
-# for all possible pairs of species (in both direction)
 ComputePairwisePvalue<-function(outfile) {
     RESU<-NULL
     NAM<-NULL
-    for (i in 1:length(sps)) {
-        for (j in sps[-i]) {
+    for (i in 1:(length(sps)-1)) {
+        for (j in (i+1):length(sps)) {
             sp1<-sps[i]
-            sp2<-j
+            sp2<-sps[j]
             nam<-paste(sp1,sp2,sep=" - ")
             NAM<-c(NAM, nam)
             print(nam)
-            run<-paste("python3 test_phylter_synteny_3.py genomes",outfile,sp1,sp2, sep=" ")
+            run<-paste("python3 test_phylter_synteny_5_2.py genomes",outfile,sp1,sp2, sep=" ")
             resu<-system(run, intern=TRUE)
-            RESU<-rbind(RESU, as.numeric(strsplit(resu[10],"\t")[[1]]))
+            RESU<-rbind(RESU,as.numeric(unlist(strsplit(resu[8], " "))))
         }
     }
-    colnames(RESU)<-c("markers","nb.markers.phyltered","breaks","dbl.breaks","breaks.remain", "dbl.breaks.remain","pval.breaks","pval.dbl.breaks")
+    colnames(RESU)<-c("nb.markers","nb.syntenic.outliers","nb.filtered","nb.filtered.syntenic.outliers","pval")
     rownames(RESU)<-NAM
     RESU<-as.data.frame(RESU)
-    RESU$breaks.phyltered<-RESU$breaks-RESU$breaks.remain
-    RESU$dbl.breaks.phyltered<-RESU$dbl.breaks-RESU$dbl.breaks.remain
     return(RESU)
 }
 
+
 # this function prepares data for plotting a heatmap containing the pvalues associated to the number of outliers associated to single or double breaks.
-GetDataFrameForHeatmapAndPlot<-function(RESU, what="breaks") {
+GetDataFrameForHeatmapAndPlot<-function(RESU) {
     sp1<-unlist(lapply(strsplit(rownames(RESU)," - "), function(x) x[1]))
     sp2<-unlist(lapply(strsplit(rownames(RESU)," - "), function(x) x[2]))
-    if (what=="breaks") DF<-data.frame(sp1=sp1, sp2=sp2,pvalue=RESU$pval.breaks)
-    if (what=="dblbreaks") DF<-data.frame(sp1=sp2, sp2=sp1,pvalue=RESU$pval.dbl.breaks)
-
-    p<-ggplot(DF, aes(x = sp1, y = sp2, fill = pvalue)) + geom_tile(color="black") + geom_text(aes(label = pvalue), color = "white", size = 4) + coord_fixed() +  theme(axis.text.x = element_text(angle = 90))
+    DF<-data.frame(sp1=sp1, sp2=sp2,pvalue=round(RESU$pval, 2))
+    p<-ggplot(DF, aes(x = sp1, y = sp2, fill = pvalue)) + geom_tile(color="black") + geom_text(aes(label = pvalue), color = "white", size = 4) + coord_fixed() +  theme(axis.text.x = element_text(angle = 90)) + scale_fill_gradient(limits=c(0,1))
     p
 }
 
@@ -47,21 +40,14 @@ R2.phy<-ComputePairwisePvalue("../data/phylter-results/file_k1.55_v2.txt") #larg
 R1.ts<-ComputePairwisePvalue("../data/treeshrink-results/treeshrink0.012.txt") #small
 R2.ts<-ComputePairwisePvalue("../data/treeshrink-results/treeshrink0.05.txt") #large
 
-p1<-GetDataFrameForHeatmapAndPlot(R1.phy,"breaks")
-p2<-GetDataFrameForHeatmapAndPlot(R1.ts,"breaks")
-p3<-GetDataFrameForHeatmapAndPlot(R1.phy,"dblbreaks")
-p4<-GetDataFrameForHeatmapAndPlot(R1.ts,"dblbreaks")
-p5<-GetDataFrameForHeatmapAndPlot(R2.phy,"breaks")
-p6<-GetDataFrameForHeatmapAndPlot(R2.ts,"breaks")
-p7<-GetDataFrameForHeatmapAndPlot(R2.phy,"dblbreaks")
-p8<-GetDataFrameForHeatmapAndPlot(R2.ts,"dblbreaks")
+p1<-GetDataFrameForHeatmapAndPlot(R1.phy)
+p2<-GetDataFrameForHeatmapAndPlot(R1.ts)
+p3<-GetDataFrameForHeatmapAndPlot(R2.phy)
+p4<-GetDataFrameForHeatmapAndPlot(R2.ts)
 
 require("ggpubr")
-#THEPLOT<-ggarrange(p1, p2, p3,p4, p5, p6, p7, p8, labels=c("A","B","C","D","E","F","G","H"),ncol = 2, nrow = 4, common.legend = TRUE, legend = "bottom") + theme(legend.title = element_blank())
-THEPLOT.PHY<-ggarrange(p1, p3, p5,p7, labels=c("A","B","C","D"), font.label = list(size = 30, color = "black"), ncol = 2, nrow = 2, common.legend = TRUE, legend = "right") + theme(legend.title = element_blank())
-THEPLOT.TS<-ggarrange(p2, p4, p6,p8, labels=c("A","B","C","D"), font.label = list(size = 30, color = "black"), ncol = 2, nrow = 2, common.legend = TRUE, legend = "right") + theme(legend.title = element_blank())
-ggsave("HEATMAPRESULTSYNTENY.PHYLTER.pdf",THEPLOT.PHY,width=16, height=17, dpi=600)
-ggsave("HEATMAPRESULTSYNTENY.TREESHRINK.pdf",THEPLOT.TS,width=16, height=17, dpi=600)
+THEPLOT<-ggarrange(p1, p2, p3,p4, labels=c("A","B","C","D"), font.label = list(size = 30, color = "black"), ncol = 2, nrow = 2, common.legend = TRUE, legend = "right") + theme(legend.title = element_blank())
+ggsave("HEATMAPRESULTSYNTENY.ALL.png",THEPLOT,width=16, height=17, dpi=600)
 
 
 
