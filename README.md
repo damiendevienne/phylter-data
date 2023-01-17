@@ -8,7 +8,8 @@ Within the two folders mentioned above, you'll find code and datsets used for th
 
 ___
 
-For questions regarding PhylteR, please refer to the dedicated github repository at https://damiendevienne.github.io/phylter
+For questions regarding PhylteR, please refer to the dedicated github repository at https://github.com/damiendevienne/phylter or explore the website of PhylteR (https://damiendevienne.github.io/phylter) containing detailed examples of the use of PhylteR.
+
 
 For help or question regarding the files present in this repo, please feel free to open an issue here.
 
