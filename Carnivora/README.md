@@ -1,6 +1,6 @@
 # Data and code for the Carnivora analyses
 
-The file `code.R` contains all the code to reproduce the analyses and the figures, except for the synteny analysis for which scripts and datasets are in folder `synteny`.
+The file `code.R` contains all the code to reproduce the analyses and the figures for the Carnivora analysis, except for the synteny analysis for which scripts and datasets are in folder `synteny`.
 
 The file `code.R` uses as input: 
 - The results of the PhylteR analyses available in `data/phylter-results/`
