@@ -1,4 +1,4 @@
-# Reconciliation analysis to compute duplication score associated to each sequence in the Carnivora dataset
+# Reconciliation analysis to compute a duplication score associated to each sequence in the Carnivora dataset
 
 A duplication score was computed for each sequence of the Carnivora dataset. These scores are available in the file `Outlier_Duplication.tar.gz`.
 
