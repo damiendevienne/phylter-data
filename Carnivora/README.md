@@ -8,7 +8,7 @@ The file `code.R` uses as input:
 - The file `Supermatrix_14463_genes_53_spp_UFBS_TESTNEW_Codon.tre` containing the full Carnivora species tree used in our analyses. 
 
 
-The gene trees (in tar folder `data/trees.tar.xz`) and the alignments (in tar folder `data/alignments.tar.xz`) used for running PhylteR and TreeShrink are avialble.
+The gene trees (in tar file `trees.tar.xz`) and the alignments (in tar file `alignments.tar.xz`) used for running PhylteR and TreeShrink are availble in the folder `data`.
 
 ___
 
