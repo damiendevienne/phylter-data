@@ -7,6 +7,7 @@ This score was obtained by *reconciling* each individual gene tree with the Carn
 Reconciliations were computed with ALE (Amalgamated likelihood estimation, available at https://github.com/ssolo/ALE) and the duplication score was computed with the homemade R script `Duplication_score.R`. Here are the details: 
 
 - Reconciliation with ALE
+
 Here is the way ALE was ran:
 
 ```sh
@@ -22,5 +23,6 @@ grep -oh "(.*;" `ls *rec | head -n 1` | head -n 1  > aletree
 ```
 
 - Duplication score with `Duplication_score.R`
+
 The R script is to be run in the directory containing the `.uml_rec` and `aletree` files.
 It output `Outlier_Duplication.txt` a data-frame with the duplication score by leaf and by gene.
